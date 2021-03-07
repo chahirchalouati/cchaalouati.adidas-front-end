@@ -1,0 +1,3 @@
+export const GET_SIZES_START = "GET_SIZES_START";
+export const GET_SIZES_SUCCESS = "GET_SIZES_SUCCESS";
+export const GET_SIZES_FAILD = "GET_SIZES_FAILD";
