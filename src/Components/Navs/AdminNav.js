@@ -13,6 +13,7 @@ function AdminNav({ openSearch, openSidebar, setOpenSearch, setOpenSideBar }) {
     const [showMenu, setshowMenu] = useState(false);
     const onLogout = () => {
         dispatch(LogOut());
+        RouterHistory.push("/")
     }
 
     return (
@@ -31,7 +32,7 @@ function AdminNav({ openSearch, openSidebar, setOpenSearch, setOpenSideBar }) {
 
                 </span>
                 <span className="avatar_box" style={{ marginLeft: '1em' }} >
-                    <img onClick={e => { setshowMenu(prev=>!prev)}}
+                    <img onClick={e => { setshowMenu(prev => !prev) }}
                         style={{ cursor: 'pointer' }}
                         src="https://images.pexels.com/photos/372042/pexels-photo-372042.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
                         alt=""

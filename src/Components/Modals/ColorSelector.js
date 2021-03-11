@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { FiChevronDown, GrClose } from "react-icons/all";
 import { batch, useDispatch, useSelector } from "react-redux";
 import {
     findColorByNameStartsWith,
-    getColors,
+    getColors
 } from "../../Services/ColorServices";
-import { FiChevronDown, GrClose } from "react-icons/all";
 
 const ColorPlaceHolder = ({ colorName, colorValue, className, removeColor }) => {
     return (
@@ -46,10 +46,13 @@ const ColorPaletteSelectorItem = ({ setCurrentColor, color, setColors }) => {
                 setColors(prev => {
                     const duplicatedColor = prev.filter(c => c == color);
                     if (duplicatedColor.length > 0) {
+
                         return [...prev]
                     }
+
                     return [...prev, color];
-                })
+                });
+
             }}
             className="color_selector_palette__item">
             <span className="color" style={{ background: color.hex }}></span>
@@ -66,6 +69,7 @@ const ColorPaletteSelector = ({ data, setCurrentColor, loadedsuccess, setColors 
 
             ?
             data.map((color, i) => <ColorPaletteSelectorItem
+
                 key={i}
                 color={color}
                 setColors={setColors}
@@ -80,7 +84,7 @@ const ColorPaletteSelector = ({ data, setCurrentColor, loadedsuccess, setColors 
 };
 
 
-function ColorSelector() {
+function ColorSelector({ setRequestColors }) {
     const { RX_COLORS } = useSelector((state) => state);
     const dispatch = useDispatch();
     const [showItems, setshowItems] = useState(false);
@@ -90,7 +94,11 @@ function ColorSelector() {
         batch(() => {
             dispatch(getColors());
         });
-    }, []);
+        if (colors) {
+            const setOfColors = colors.map(color => color.id);
+            setRequestColors(setOfColors)
+        }
+    }, [colors]);
 
     const colorFilter = (e) => {
         e.target.value.length > 2 &&
@@ -103,7 +111,7 @@ function ColorSelector() {
 
     const removeColor = (currentColor) => {
         const filtred = colors.filter(color => color.name !== currentColor);
-        setColors( [...filtred]);
+        setColors([...filtred]);
     }
 
 
@@ -140,6 +148,8 @@ function ColorSelector() {
                         data={RX_COLORS.colors}
                         loadedsuccess={RX_COLORS.get_success}
                         setColors={setColors}
+
+
                     />
                 )}
             </div>

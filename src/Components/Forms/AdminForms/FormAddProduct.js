@@ -1,39 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { batch, useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../../Services/CategorieService";
 import { getColors } from "../../../Services/ColorServices";
 import { getSizes } from "../../../Services/SizesService";
 import ColorSelector from "../../Modals/ColorSelector";
-import Select from "../../Select/Select";
 
-function FormAddProduct() {
+function FormAddProduct({ setRequest, request, setRequestColors }) {
     const { RX_CATEGORIES, RX_COLORS, RX_SIZES } = useSelector((state) => state);
     const dispatch = useDispatch();
-    const [request, setrequest] = useState({
-        name: null,
-        code: null,
-        description: null,
-        files: [],
-        price: null,
-        categories: [],
-        colors: [],
-        sizes: [],
-        date: null,
-        discount: null,
-        gender: null,
-
-    });
     useEffect(() => {
-
         batch(() => {
             dispatch(getSizes())
             dispatch(getColors())
             dispatch(getCategories())
         })
     }, []);
+
+
+
+
+
     return (
         <>
-            <form className="admin__add__product__wrapper_form">
+            <div className="admin__add__product__wrapper_form">
                 <h3>Add Product</h3>
 
                 <div className="inputs_group">
@@ -46,7 +35,7 @@ function FormAddProduct() {
                             value={[request.code]}
                             placeholder={"Article code"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -59,7 +48,7 @@ function FormAddProduct() {
                             value={[request.name]}
                             placeholder={"Name"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -72,7 +61,7 @@ function FormAddProduct() {
                             value={[request.price]}
                             placeholder={"Price"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -81,11 +70,11 @@ function FormAddProduct() {
                         <label htmlFor="">Production Date</label>
                         <input
                             type="date"
-                            name="date"
-                            value={[request.date]}
+                            name="productionDate"
+                            value={[request.productionDate]}
                             placeholder={"Production Date"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -94,11 +83,11 @@ function FormAddProduct() {
                         <label htmlFor="">Discount</label>
                         <input
                             type={"text"}
-                            name="name"
+                            name="discount"
                             value={[request.discount]}
                             placeholder={"Discount"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -107,11 +96,11 @@ function FormAddProduct() {
                         <label htmlFor="">Quantity</label>
                         <input
                             type={"text"}
-                            name="price"
+                            name="quantity"
                             value={[request.quantity]}
                             placeholder={"availble quantity"}
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: e.target.value });
                             }}
                         />
                     </div>
@@ -120,12 +109,16 @@ function FormAddProduct() {
                     <div className="box_input_form">
                         <label htmlFor="">categories</label>
                         <select
+                           
+                            value={request["categories"]}
                             name="categories"
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: [...request.categories, e.currentTarget.value] });
+
+                                console.log({ ...e.currentTarget.value });
                             }}
                         >
-                            {RX_CATEGORIES.get_success && RX_CATEGORIES.categories.map((c, i) => <option value={c} key={i}>{c.name}</option>)}
+                            {RX_CATEGORIES.get_success && RX_CATEGORIES.categories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
 
                         </select>
                     </div>
@@ -137,10 +130,10 @@ function FormAddProduct() {
 
                             name="sizes"
                             onChange={(e) => {
-                                setrequest({ ...request, [e.target.name]: e.target.value });
+                                setRequest({ ...request, [e.target.name]: [...request.sizes, e.target.value] });
                             }}
                         >
-                            {RX_SIZES.get_success && RX_SIZES.sizes.map((c, i) => <option value={c} key={i}>{c.value}</option>)}
+                            {RX_SIZES.get_success && RX_SIZES.sizes.map((size, i) => <option value={size.id} key={i}>{size.value}</option>)}
 
                         </select>
                     </div>
@@ -150,7 +143,7 @@ function FormAddProduct() {
                         <label htmlFor="">gender</label>
                         <select
                             name="gender"
-                            onChange={(e) => { setrequest({ ...request, [e.target.name]: e.target.value }); }}
+                            onChange={(e) => { setRequest({ ...request, [e.target.name]: e.target.value }); }}
                         >
                             {["MEN", "WOMEN", "KIDS"].map((c, i) => <option value={c} key={i}>{c}</option>)}
 
@@ -162,22 +155,22 @@ function FormAddProduct() {
 
                 </div>
 
-                <ColorSelector />
+                <ColorSelector setRequestColors={setRequestColors} />
                 <div className="box_input_form">
                     <label htmlFor="">description</label>
                     <textarea
                         name="description"
-                        value={[request.description]}
+                        value={request.description}
                         placeholder={"Write a description ..."}
                         onChange={(e) => {
-                            setrequest({
+                            setRequest({
                                 ...request,
-                                [e.target.description]: e.target.value,
+                                [e.target.name]: e.target.value,
                             });
                         }}
                     />
                 </div>
-            </form>
+            </div>
         </>
     );
 }
@@ -194,7 +187,7 @@ export default FormAddProduct;
                         value={[request.name]}
                         placeholder={"name"}
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     />
                 </div>
@@ -206,7 +199,7 @@ export default FormAddProduct;
                         value={[request.code]}
                         placeholder={"code"}
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     />
                 </div>
@@ -218,7 +211,7 @@ export default FormAddProduct;
                         value={[request.price]}
                         placeholder={"price"}
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     />
                 </div>
@@ -227,7 +220,7 @@ export default FormAddProduct;
                     <select
                         name="categories"
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     >
                         {RX_CATEGORIES.get_success && RX_CATEGORIES.categories.map((c, i) => <option value={c} key={i}>{c.name}</option>)}
@@ -240,7 +233,7 @@ export default FormAddProduct;
 
                         name="sizes"
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     >
                         {RX_SIZES.get_success && RX_SIZES.sizes.map((c, i) => <option value={c} key={i}>{c.value}</option>)}
@@ -252,7 +245,7 @@ export default FormAddProduct;
                     <select
                         name="gender"
                         onChange={(e) => {
-                            setrequest({ ...request, [e.target.name]: e.target.value });
+                            setRequest({ ...request, [e.target.name]: e.target.value });
                         }}
                     ></select>
                 </div>
@@ -263,7 +256,7 @@ export default FormAddProduct;
                         value={[request.description]}
                         placeholder={"description"}
                         onChange={(e) => {
-                            setrequest({
+                            setRequest({
                                 ...request,
                                 [e.target.description]: e.target.value,
                             });

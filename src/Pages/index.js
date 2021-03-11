@@ -7,7 +7,6 @@ import RouteWrapper from "../Routes/RouteWrapper";
 
 function App() {
   const [isReady, setReady] = useState(false);
-  const [isRole, setRole] = useState("USER");
   useEffect(() => {
     setTimeout(() => {
       setReady(() => true);

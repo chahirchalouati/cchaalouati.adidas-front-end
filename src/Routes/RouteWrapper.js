@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { Route, Router, Switch } from "react-router";
+import RootFooter from "../Components/Footers/RootFooter";
 import ColorSelector from "../Components/Modals/ColorSelector";
 import NavBar from "../Components/Navs/NavBar";
-import RootFooter from "../Components/Footers/RootFooter";
 import ScrollIntoView from "../Hooks/ScrollIntoView ";
 import AccountLogin from "../Pages/AccountLogin";
 import Admin from "../Pages/Admin";
@@ -11,20 +11,19 @@ import Cart from "../Pages/Cart";
 import Home from "../Pages/Home";
 import Product from "../Pages/Product";
 import Wishlist from "../Pages/Wishlist";
-import history from "./History";
-import RouterHistory from "./History";
+import { default as history } from "./History";
 
 function RouteWrapper() {
-    const { RX_AUTH: { role, isAuthenticated } } = useSelector((state) => state);
-    useEffect(() => {
-        role && RouterHistory.push("/");
-    }, [role])
+    const {
+        RX_AUTH: { role, isAuthenticated },
+    } = useSelector((state) => state);
+
     return (
         <Router history={history}>
             <Switch>
-                {(role === "ADMIN" && isAuthenticated) && (
+                {role === "ADMIN" && isAuthenticated && (
                     <ScrollIntoView>
-                        {<Route path="/" component={Admin} />}
+                        <Route path="/" component={Admin} />
                         <Route exact path="/selector" component={ColorSelector} />
                     </ScrollIntoView>
                 )}

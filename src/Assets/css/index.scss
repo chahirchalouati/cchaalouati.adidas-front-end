@@ -1,39 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=RocknRoll+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-$black: #000000;
-$backgroundColor: white;
 
-@function strip-unit($value) {
-  @return $value / ($value * 0 + 1);
-}
-
-@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
-  $u1: unit($min-vw);
-  $u2: unit($max-vw);
-  $u3: unit($min-font-size);
-  $u4: unit($max-font-size);
-
-  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
-    & {
-      font-size: $min-font-size;
-      @media screen and (min-width: $min-vw) {
-        font-size: calc(
-          #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
-            ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
-        );
-      }
-      @media screen and (min-width: $max-vw) {
-        font-size: $max-font-size;
-      }
-    }
-  }
-}
-$min_width: 320px;
-$max_width: 1200px;
-$min_font: 16px;
-$max_font: 24px;
-$mod_1: 1.2; // mobile
-$mod_2: 1.5; // desktop
+@import "./Mixins.scss";
+@import "./Variables.scss";
 
 h1 {
   font-size: $mod_1 * $mod_1 * $mod_1 * $mod_1 * 1rem;
@@ -71,13 +40,32 @@ h4 {
     $mod_2 * $mod_2 * $min_font
   );
 }
-* {
+
+*,
+html {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   outline: none;
+  list-style: none;
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(255, 248, 143, 0.3);
+    border-radius: 10px;
+    background-color: #ffffff;
+  }
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    box-shadow: inset 0 0 6px rgba(146, 146, 146, 0.3);
+    background-color: $yellow;
+  }
 }
 
 #root {
@@ -91,6 +79,7 @@ h4 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   .sk-cube-grid {
     width: 40px;
     height: 40px;
@@ -941,7 +930,7 @@ h4 {
     align-items: center;
     justify-content: center;
     width: 100%;
-    background: #ede734;
+    background: $yellow;
     min-height: 10em;
     .text {
       font-size: 30px;
@@ -1050,8 +1039,9 @@ h4 {
   .club_info {
     height: 100vh;
     flex: 0.5;
-    padding: 1em 0px;
+    padding: 0em 20px;
     position: relative;
+    font-size: 15px;
     .club_info_img {
       width: 100%;
       height: 20em;
@@ -1062,8 +1052,8 @@ h4 {
       display: flex;
       flex-direction: row;
       align-items: center;
-      padding: 0.5em 1em;
-      font-size: 13px;
+      padding: 0.8em 1em;
+      font-size: 12px;
       color: rgb(70, 74, 78);
     }
     .btn_wrapper {
@@ -1662,3 +1652,37 @@ h4 {
     transform: rotate(360deg);
   }
 }
+.error_container {
+  margin: auto auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+
+  height: 100%;
+  width: 100%;
+  .message {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 18px;
+    text-align: center;
+    line-height: 1.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    min-width: calc(100% - 10em);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0px 1px 1px red, 0px 1px 1px red, 0px 1px 1px red;
+    box-shadow: 0px 3px 2px rgba(192, 192, 192, 0.5),
+      0px 3px 3px rgba(192, 192, 192, 0.5), 0px 3px 4px rgba(192, 192, 192, 0.5);
+  }
+}
+
+@import "./admin.scss";

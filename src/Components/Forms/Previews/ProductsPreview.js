@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { GrCirclePlay } from 'react-icons/gr';
 import Loading from '../../Loading/Loading';
 
-function ProductsPreview() {
+function ProductsPreview({ addFilesToRequest }) {
 
     const inputRef = useRef('');
     const [filesRequest, setFilesRequest] = useState({ files: [] });
@@ -26,6 +26,7 @@ function ProductsPreview() {
                 style={{ display: 'none' }}
                 onChange={e => {
                     setFilesRequest({ ...filesRequest, files: [...e.target.files] });
+                    addFilesToRequest([...e.target.files]);
                     if (e.target.files.length > 0) {
                         const find = e.target.files[0];
                         updateMedia(find.type.toString().split("/")[0], find);

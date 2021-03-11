@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
+import RouterHistory from "../../Routes/History";
 import { SignIn } from "../../Services/AuthService";
 import InputBox from "../Inputs/InputBox";
-import Loading from "../Loading/Loading";
 
 
 function LoginForm() {
@@ -29,6 +29,7 @@ function LoginForm() {
     const setPassword = (value) => {
         setrequest({ ...request, password: value });
     };
+
 
     return (
         <div className="form_login">
